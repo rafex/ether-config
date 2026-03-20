@@ -9,5 +9,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.RECORD_COMPONENT)
 public @interface Max {
 
-	long value();
+    long value();
 }

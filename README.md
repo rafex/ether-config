@@ -25,12 +25,37 @@ Typed configuration utilities for Ether.
 - `ReloadableConfigSource`: live reload for file-backed configuration
 - `EnvironmentConfigSource`: resolves both raw env vars and dot-notation aliases like `SERVER_PORT -> server.port`
 
+## Example
+
+```java
+var config = EtherConfig.of(
+    new EnvironmentConfigSource(),
+    new SystemPropertyConfigSource(),
+    new PropertiesFileConfigSource(Path.of("application.properties"))
+);
+
+var server = config.bind("http", ServerConfig.class);
+```
+
+Use dot notation for files and aliases:
+
+- `http.port=8080`
+- `http.max.threads=32`
+- `HTTP_PORT=8080`
+- `HTTP_MAX_THREADS=32`
+
+## Notes
+
+- Validation is lightweight and local to Ether; it does not depend on Jakarta Validation.
+- Dynamic reload currently applies to file-backed sources observed through `WatchService`.
+- The library is designed for plain Java first and does not require a DI container.
+
 ## Maven
 
 ```xml
 <dependency>
   <groupId>dev.rafex.ether.config</groupId>
   <artifactId>ether-config</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>8.0.0-SNAPSHOT</version>
 </dependency>
 ```
