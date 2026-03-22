@@ -34,7 +34,7 @@ public final class ReloadableConfigSource implements ConfigSource, AutoCloseable
         watchService = path.getParent().getFileSystem().newWatchService();
         path.getParent().register(watchService, StandardWatchEventKinds.ENTRY_CREATE,
                 StandardWatchEventKinds.ENTRY_MODIFY);
-        watcherThread = Thread.ofPlatform().name("ether-config-reload-" + path.getFileName()).start(this::watchLoop);
+        watcherThread = Thread.ofVirtual().name("ether-config-reload-" + path.getFileName()).start(this::watchLoop);
     }
 
     public static ReloadableConfigSource of(final Path path, final Format format) throws IOException {
@@ -76,13 +76,13 @@ public final class ReloadableConfigSource implements ConfigSource, AutoCloseable
                     if (path.getFileName().equals(changed)) {
                         try {
                             reloadNow();
-                        } catch (final IOException ignored) {
+                        } catch (IOException _) {
                             // Keep serving the previous snapshot until a valid reload is available.
                         }
                     }
                 }
                 key.reset();
-            } catch (final InterruptedException ignored) {
+            } catch (InterruptedException _) {
                 Thread.currentThread().interrupt();
                 return;
             }
